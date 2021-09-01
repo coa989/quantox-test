@@ -11,12 +11,20 @@ class Auth
     private $db;
     protected $user;
 
+    /**
+     * Auth constructor.
+     */
     public function __construct()
     {
         $this->db = new Database();
         $this->user = new User;
     }
 
+    /**
+     * @param $username
+     * @param $email
+     * @param $hashed_password
+     */
     protected function register($username, $email, $hashed_password)
     {
         $statement = $this->db->pdo->prepare("INSERT INTO users(name, email, password) VALUES(:name, :email, :password)");
@@ -27,6 +35,11 @@ class Auth
         header('Location: views/login.view.php');
     }
 
+    /**
+     * @param $email
+     * @param $password
+     * @return bool|mixed
+     */
     protected function login($email, $password)
     {
         $row = $this->user->find(['email' => $email]);
@@ -50,6 +63,9 @@ class Auth
         }
     }
 
+    /**
+     * @return bool
+     */
     public function logout()
     {
         session_start();
@@ -57,6 +73,7 @@ class Auth
         unset($_SESSION['user_name']);
         unset($_SESSION['user_email']);
         session_destroy();
+        header('Location: /views/login.view.php');
         return true;
     }
 }

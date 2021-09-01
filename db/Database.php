@@ -2,10 +2,6 @@
 
 namespace app\db;
 
-/**
- * Class Database
- * @package app\db
- */
 class Database
 {
     /**

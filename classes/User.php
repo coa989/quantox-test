@@ -10,18 +10,18 @@ class User
     private $db;
     private $tableName = 'users';
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->db = new Database();
     }
 
-    public function index()
-    {
-        $statement = $this->db->pdo->prepare('SELECT * FROM users');
-        $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_OBJ);
-    }
-
+    /**
+     * @param array $where
+     * @return mixed
+     */
     public function find(array $where)
     {
         $tableName = $this->tableName;
@@ -36,6 +36,10 @@ class User
         return $statement->fetchObject();
     }
 
+    /**
+     * @param $query
+     * @return array
+     */
     public function searchQuery($query)
     {
         $statement = $this->db->pdo->prepare("SELECT * FROM users WHERE name LIKE :name OR email LIKE :email");
