@@ -15,10 +15,25 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="container">
+            <?php if(isset($_SESSION['user_id'])):?>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= ($_SESSION['role'] == 'admin') ? '/views/admin.view.php' : '/views/home.view.php' ?>">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <?= $_SESSION['user_name']; ?>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/logout.php">Logout</a>
+                        </div>
+                    </li>
+                </ul>
                 <form action="/search.php" method="get" class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
                 </form>
+            <?php else: ?>
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/views/login.view.php">Login</a>
@@ -27,6 +42,7 @@
                         <a class="nav-link" href="/views/register.view.php">Register</a>
                     </li>
                 </ul>
+            <?php endif; ?>
         </div>
     </div>
 </nav>
