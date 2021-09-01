@@ -5,7 +5,6 @@ namespace app\classes;
 session_start();
 
 use app\db\Database;
-use PDO;
 
 class Auth
 {
@@ -31,6 +30,7 @@ class Auth
                 'password_err' => '',
                 'confirm_password_err' => ''
             ];
+
             if(empty($_POST['name'])){
                 $data['name_err'] = 'Please enter name';
             } elseif ($this->user->find(['name' => $_POST['name']])){
@@ -49,8 +49,8 @@ class Auth
 
             if(empty($_POST['password'])){
                 $data['password_err'] = 'Please enter password';
-            } elseif(strlen($_POST['password']) < 6){
-                $data['password_err'] = 'Password must be minimum 6 characters long';
+            } elseif(strlen($_POST['password']) < 9){
+                $data['password_err'] = 'Password must be minimum 9 characters long';
             }
 
             if(empty($_POST['confirm_password'])){
@@ -79,7 +79,58 @@ class Auth
         header('Location: views/login.view.php');
     }
 
+    public function validateLogin()
+    {
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'email' => trim($_POST['email']),
+                'password' => trim($_POST['password']),
+                'email_err' => '',
+                'password_err' => ''
+            ];
 
+            if(empty($_POST['email']) || empty($_POST['password'])){
+                $empty_value = empty($_POST['email']) ? 'email' : 'password';
+                $empty_value_err = $empty_value.'_err';
+                $data[$empty_value_err] = 'Please enter your ' .$empty_value;
 
+                $_SESSION['data'] = $data;
+                die(header('Location: views/login.view.php'));
+            }
 
+            if(!$this->user->find(['email' => $_POST['email']])){
+                $data['email_err'] = 'Incorrect email.';
+                $_SESSION['data'] = $data;
+                header('Location: views/login.view.php');
+            }
+            if(!$this->login($_POST['email'], $_POST['password'])){
+                $data['password_err'] = 'Incorrect password.';
+                $_SESSION['data'] = $data;
+                header('Location: views/login.view.php');
+            }
+        }
+    }
+    private function login($email, $password)
+    {
+        $row = $this->user->find(['email' => $email]);
+
+        if($row){
+            $hashed_password = $row->password;
+            if(password_verify($password, $hashed_password)){
+                $_SESSION['user_id'] = $row->id;
+                $_SESSION['user_name'] = $row->name;
+                $_SESSION['user_email'] = $row->email;
+                $_SESSION['role'] = $row->role;
+                if($_SESSION['role'] == 'admin'){
+                    header('Location: admin.php');
+                } else{
+                    header('Location: views/home.view.php');
+                }
+                return $row;
+            } else{
+                return false;
+            }
+        }
+    }
 }
