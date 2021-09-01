@@ -103,4 +103,11 @@ class Validation extends Auth
             header('Location: views/login.view.php');
         }
     }
+
+    public function validateLogout()
+    {
+        if (isset($_SESSION['user_id'])) {
+            $this->logout();
+        }
+    }
 }

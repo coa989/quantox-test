@@ -1,12 +1,12 @@
 <?php
 
-use app\classes\Auth;
+use app\classes\Validation;
 
 require_once __DIR__ . "/vendor/autoload.php";
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$user = (new Auth())->logout();
+$user = (new Validation())->validateLogout();
 
 header('Location: /views/login.view.php');
