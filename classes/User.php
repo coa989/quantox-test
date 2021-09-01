@@ -7,6 +7,7 @@ use app\db\Database;
 class User
 {
     private $db;
+    private $tableName = 'users';
 
     public function __construct()
     {
@@ -20,29 +21,17 @@ class User
         return $statement->fetchAll(\PDO::FETCH_OBJ);
     }
 
-    public function findByName($name)
+    public function find(array $where)
     {
-        $statement = $this->db->pdo->prepare('SELECT * FROM users WHERE name = :name');
-        $statement->bindValue(':name', $name);
+        $tableName = $this->tableName;
+        $attributes = array_keys($where);
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $statement = $this->db->pdo->prepare("SELECT * FROM $tableName WHERE $sql");
+        foreach ($where as $key => $value) {
+            $statement->bindValue(":$key", $value);
+        }
         $statement->execute();
 
-        if($statement->rowCount() > 0){
-            return true;
-        } else{
-            return false;
-        }
-    }
-
-    public function findByEmail($email)
-    {
-        $statement = $this->db->pdo->prepare('SELECT * FROM users WHERE email = :email');
-        $statement->bindValue(':email', $email);
-        $statement->execute();
-
-        if($statement->rowCount() > 0){
-            return true;
-        } else{
-            return false;
-        }
+        return $statement->fetchObject();
     }
 }

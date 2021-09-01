@@ -33,7 +33,7 @@ class Auth
             ];
             if(empty($_POST['name'])){
                 $data['name_err'] = 'Please enter name';
-            } elseif ($this->user->findByName($_POST['name'])){
+            } elseif ($this->user->find(['name' => $_POST['name']])){
                 $data['name_err'] = 'Username already used';
             }
 
@@ -42,7 +42,7 @@ class Auth
             } elseif(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
                 $data['email_err'] = 'Please use valid email address';
             } else{
-                if($this->user->findByEmail($_POST['email'])){
+                if($this->user->find(['email' => $_POST['email']])){
                     $data['email_err'] = 'Email address already used';
                 }
             }
