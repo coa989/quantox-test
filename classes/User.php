@@ -34,4 +34,5 @@ class User
 
         return $statement->fetchObject();
     }
+
 }
