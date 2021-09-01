@@ -33,8 +33,6 @@ class Auth
 
             if(empty($_POST['name'])){
                 $data['name_err'] = 'Please enter name';
-            } elseif ($this->user->find(['name' => $_POST['name']])){
-                $data['name_err'] = 'Username already used';
             }
 
             if(empty($_POST['email'])){
@@ -132,5 +130,15 @@ class Auth
                 return false;
             }
         }
+    }
+
+    public function logout()
+    {
+        session_start();
+        unset($_SESSION['user_id']);
+        unset($_SESSION['user_name']);
+        unset($_SESSION['user_email']);
+        session_destroy();
+        return true;
     }
 }
