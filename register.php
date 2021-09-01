@@ -4,5 +4,6 @@ require_once __DIR__ . "/vendor/autoload.php";
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-header('location: views/home.view.php');
+use app\classes\Auth;
 
+(new Auth())->validateRegister();
