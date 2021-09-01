@@ -3,6 +3,7 @@
 namespace app\classes;
 
 use app\db\Database;
+use PDO;
 
 class User
 {
@@ -33,6 +34,16 @@ class User
         $statement->execute();
 
         return $statement->fetchObject();
+    }
+
+    public function searchQuery($query)
+    {
+        $statement = $this->db->pdo->prepare("SELECT * FROM users WHERE name LIKE :name OR email LIKE :email");
+        $statement->bindValue(':name', '%'.$query.'%');
+        $statement->bindValue(':email', '%'.$query.'%');
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_OBJ);
     }
 
 }
