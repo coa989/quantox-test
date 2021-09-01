@@ -4,6 +4,9 @@ namespace app\classes;
 
 class Validation extends Auth
 {
+    /**
+     * Validate register $_POST data
+     */
     public function validateRegister()
     {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -54,6 +57,9 @@ class Validation extends Auth
         }
     }
 
+    /**
+     * Validate login $_POST data
+     */
     public function validateLogin()
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -87,6 +93,9 @@ class Validation extends Auth
         }
     }
 
+    /**
+     * Validate auth and search query
+     */
     public function validateSearch($query)
     {
         if (isset($_SESSION['user_id'])) {
@@ -104,6 +113,9 @@ class Validation extends Auth
         }
     }
 
+    /**
+     * Validate auth
+     */
     public function validateLogout()
     {
         if (isset($_SESSION['user_id'])) {

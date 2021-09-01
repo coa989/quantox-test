@@ -9,4 +9,3 @@ $dotenv->load();
 
 $user = (new Validation())->validateLogout();
 
-header('Location: /views/login.view.php');
